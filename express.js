@@ -3,8 +3,8 @@ const mysql = require('mysql')
 const app = express()
 const bodyparser = require('body-parser');
 
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({ extended: false}));
+app.use(express.urlencoded({extended:false}))
+app.use(express.json())
 
 const con = mysql.createConnection({
   host: "localhost",
@@ -17,12 +17,12 @@ app.get('/',(req,res) =>{
 })
 
 app.post('/adduser',(req,res)=>{
-  var firstName = req.body.firstName;
-  var lastName = req.body.lastName;
-  var regNumber = req.body.regNumber;
+  let firstName = req.body.firstName;
+  let lastName = req.body.lastName;
+  let regNumber = req.body.regNumber;
 
 
-  var query = 'INSERT INTO userinfo (firstName,lastName,regNumber) VALUES ("'+firstName+'","'+lastName+'", "'+regNumber+'")';
+  let query = 'INSERT INTO userinfo (firstName,lastName,regNumber) VALUES ("'+firstName+'","'+lastName+'", "'+regNumber+'")';
   con.query(query,(err,results)=>{
     if(err) {res.send(err.message);}
     else{ res.send({
@@ -38,7 +38,6 @@ app.post("/update", (req, res) => {
   let newLast = req.body.newLast;
 
   let query = `UPDATE userinfo SET firstName = "${newFirst}" , lastName = "${newLast}" WHERE regNumber = ${regNumber} `;
-res.send({
   con.query(query, (err, result) => {
     if (err) {
       res.send(err.message);
